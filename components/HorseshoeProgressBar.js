@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View, Animated, Easing, StyleSheet } from 'react-native';
 import Svg, { Path, G, Defs, LinearGradient, Stop } from 'react-native-svg';
 import CustomText from './CustomText';
+import StartButton from './StartButton';
 
-const HorseshoeProgressBar = ({ progress, duration, durationSeconds }) => {
+const HorseshoeProgressBar = ({ progress, duration }) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -15,13 +16,14 @@ const HorseshoeProgressBar = ({ progress, duration, durationSeconds }) => {
     }).start();
   }, [progress, duration]);
 
-  const svgWidthHeight = 500;
+  const svgWidth = 300;
+  const svgHeight = 275;
   const strokeWidth = 25;
   const outlineWidth = strokeWidth + 16; // Slightly larger for the outline
-  const whiteOutlineWidth = strokeWidth + 8; // Slightly smaller for the white outline
+  const whiteOutlineWidth = strokeWidth +8; // Slightly smaller for the white outline
   const radius = 120;
-  const centerX = svgWidthHeight / 2;
-  const centerY = svgWidthHeight / 2;
+  const centerX = svgWidth / 2;
+  const centerY = svgWidth / 2;
   const startAngle = -225; // Start angle of the horseshoe
   const endAngle = 45; // End angle of the horseshoe
   const progressColor = '#F9F2F7';
@@ -58,9 +60,10 @@ const HorseshoeProgressBar = ({ progress, duration, durationSeconds }) => {
     outputRange: [arcLength, 0], // Draws the stroke from full dash to no dash
   });
 
+  const remainingTime = formatTime(duration - progress);
   return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Svg height={svgWidthHeight} width={svgWidthHeight}>
+        <View style={styles.container}>
+          <Svg height={275} width={svgWidth} style={styles.svg}>
             <G>
               {/* Black Outline for the Background Arc */}
               <Path
@@ -103,9 +106,10 @@ const HorseshoeProgressBar = ({ progress, duration, durationSeconds }) => {
               />
             </G>
           </Svg>
-          <CustomText style={{ marginTop: 10, fontSize: 20 }}>
-            {Math.round(progress)}%
+          <CustomText style={styles.timerText}>
+            {remainingTime}
           </CustomText>
+          <StartButton />
         </View>
   );
 };
@@ -113,4 +117,28 @@ const HorseshoeProgressBar = ({ progress, duration, durationSeconds }) => {
 // AnimatedPath is a workaround for animating the Path component
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  const paddedMinutes = String(minutes).padStart(2, '0');
+  const paddedSeconds = String(remainingSeconds).padStart(2, '0');
+  return `${paddedMinutes}:${paddedSeconds}`;
+};
+
+
+const styles = StyleSheet.create({ 
+  container: {
+    position: 'absolute', 
+    alignItems: 'center', 
+    // backgroundColor: 'blue',
+  },
+  svg: {
+    // backgroundColor: 'green',
+  }, 
+  timerText: {
+    fontSize: 54,
+    // backgroundColor: 'red',
+  },
+});
 export default HorseshoeProgressBar;

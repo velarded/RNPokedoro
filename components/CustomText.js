@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 const CustomText = ({ style, ...props }) => {
   return (
     <Text
-      style={[{ fontFamily: 'PressStart2P' }, style]}
+      style={[{ fontFamily: 'VT323' }, style]}
       {...props}
     />
   );

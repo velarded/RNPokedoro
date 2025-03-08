@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import HorseshoeProgressBar from './components/HorseshoeProgressBar';
-// import HorseshoeProgressBar from './components/TestProgressBar';
-import HorseShoeArc from './components/Arc';
 import * as Font from 'expo-font';
 import CustomText from './components/CustomText';
 import Header from './components/Header';
 import { StatusBar } from 'expo-status-bar';
+import BackgroundView from './components/BackgroundView';
+import StartButton from './components/StartButton';
 
 
 const App = () => {
-  const durationSeconds = 1500;
-  const duration = 100;
+  const duration = 1500;
   const [progress, setProgress] = useState(0);
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
     async function loadFont() {
       await Font.loadAsync({
-        'PressStart2P': require('./assets/fonts/PressStart2P-Regular.ttf'),
+        'VT323': require('./assets/fonts/VT323-Regular.ttf'),
       });
       setFontLoaded(true);
     }
@@ -38,14 +37,21 @@ const App = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handlePress = () => {
+    console.log('Start Button Pressed!');
+  };
+
   return (
     <>
     <StatusBar style='light'/>
     <View style={styles.appContainer}>
-      <Header />
-      
-      <HorseshoeProgressBar progress={progress} duration={duration} durationSeconds={durationSeconds}/>
-      <Image style={{ width: 100, height: 100 }} source={require('./assets/pokemon-egg.gif')}/>
+      {/* <Header /> */}
+      <View style={styles.wrapper}>
+        <BackgroundView />
+      </View>
+      {/* <StartButton onPress={handlePress} /> */}
+      <HorseshoeProgressBar progress={progress} duration={duration}/>
+      <Image style={styles.eggImg} source={require('./assets/pokemon-egg.gif')}/>
 
     </View>
     </>
@@ -55,13 +61,18 @@ const App = () => {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    width: '100%', // Ensures full width
-    height: '100%', // Ensures full height
-    paddingTop: 50,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#385655',
-  }
+  },
+  wrapper: {
+    alignSelf: 'stretch', // Ensures the wrapper takes up the full width
+    flex: 1,
+  },
+  eggImg: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+  },
 });
 
 export default App;
