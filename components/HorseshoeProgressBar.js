@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, Easing, StyleSheet } from 'react-native';
-import Svg, { Path, G, Defs, LinearGradient, Stop } from 'react-native-svg';
-import CustomText from './CustomText';
-import StartButton from './StartButton';
+import Svg, { Path, G } from 'react-native-svg';
 
 const HorseshoeProgressBar = ({ progress, duration }) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -17,7 +15,6 @@ const HorseshoeProgressBar = ({ progress, duration }) => {
   }, [progress, duration]);
 
   const svgWidth = 300;
-  const svgHeight = 275;
   const strokeWidth = 25;
   const outlineWidth = strokeWidth + 16; // Slightly larger for the outline
   const whiteOutlineWidth = strokeWidth +8; // Slightly smaller for the white outline
@@ -60,7 +57,6 @@ const HorseshoeProgressBar = ({ progress, duration }) => {
     outputRange: [arcLength, 0], // Draws the stroke from full dash to no dash
   });
 
-  const remainingTime = formatTime(duration - progress);
   return (
         <View style={styles.container}>
           <Svg height={275} width={svgWidth} style={styles.svg}>
@@ -106,10 +102,6 @@ const HorseshoeProgressBar = ({ progress, duration }) => {
               />
             </G>
           </Svg>
-          <CustomText style={styles.timerText}>
-            {remainingTime}
-          </CustomText>
-          <StartButton />
         </View>
   );
 };
@@ -117,28 +109,9 @@ const HorseshoeProgressBar = ({ progress, duration }) => {
 // AnimatedPath is a workaround for animating the Path component
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const formatTime = (seconds) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  const paddedMinutes = String(minutes).padStart(2, '0');
-  const paddedSeconds = String(remainingSeconds).padStart(2, '0');
-  return `${paddedMinutes}:${paddedSeconds}`;
-};
-
-
 const styles = StyleSheet.create({ 
   container: {
-    position: 'absolute', 
-    alignItems: 'center', 
-    // backgroundColor: 'blue',
-  },
-  svg: {
-    // backgroundColor: 'green',
-  }, 
-  timerText: {
-    fontSize: 54,
-    // backgroundColor: 'red',
+    
   },
 });
 export default HorseshoeProgressBar;

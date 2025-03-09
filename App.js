@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import HorseshoeProgressBar from './components/HorseshoeProgressBar';
+import { View, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
-import CustomText from './components/CustomText';
-import Header from './components/Header';
 import { StatusBar } from 'expo-status-bar';
-import BackgroundView from './components/BackgroundView';
-import StartButton from './components/StartButton';
+import Timer from './components/Timer';
 
 
 const App = () => {
@@ -46,13 +42,7 @@ const App = () => {
     <StatusBar style='light'/>
     <View style={styles.appContainer}>
       {/* <Header /> */}
-      <View style={styles.wrapper}>
-        <BackgroundView />
-      </View>
-      {/* <StartButton onPress={handlePress} /> */}
-      <HorseshoeProgressBar progress={progress} duration={duration}/>
-      <Image style={styles.eggImg} source={require('./assets/pokemon-egg.gif')}/>
-
+      <Timer />
     </View>
     </>
   );
@@ -63,15 +53,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  wrapper: {
-    alignSelf: 'stretch', // Ensures the wrapper takes up the full width
-    flex: 1,
-  },
-  eggImg: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
   },
 });
 

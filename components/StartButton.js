@@ -1,6 +1,8 @@
 // StartButton.js
 import React, { useRef, useEffect } from 'react';
 import { TouchableOpacity, View, StyleSheet, Animated, Easing } from 'react-native';
+import CustomText from './CustomText';
+import Svg, { Path } from 'react-native-svg';
 
 const StartButton = ({ onPress }) => {
   // Create an animated value for the bounce effect
@@ -11,7 +13,7 @@ const StartButton = ({ onPress }) => {
     const bounceAnimation = Animated.loop(
       Animated.sequence([
         Animated.timing(bounceValue, {
-          toValue: -10, // Move up
+          toValue: -5, // Move up
           duration: 500,
           easing: Easing.linear,
           useNativeDriver: true,
@@ -33,18 +35,18 @@ const StartButton = ({ onPress }) => {
 
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Animated.View
-        style={[
-          styles.arrowContainer,
-          {
-            transform: [{ translateY: bounceValue }], // Apply bounce animation
-          },
-        ]}
-      >
-        {/* White border triangle (larger) */}
-        <View style={[styles.arrow, styles.arrowBorder]} />
-        {/* Red triangle (smaller) */}
-        <View style={[styles.arrow, styles.arrowInner]} />
+        <CustomText style={styles.text}>Start</CustomText>
+        <Animated.View
+            style={[
+            styles.arrowContainer,
+            {
+                transform: [{ translateY: bounceValue }], // Apply bounce animation
+            },
+            ]}
+        >
+        <Svg>
+            <Path d="M9.96393 11.104L4.00056 3.39513V0.000107765L16.125 0.000107765V3.39513L9.96393 11.104Z" fill="#DE3140" stroke="white" strokeWidth="2"/>
+        </Svg>
       </Animated.View>
     </TouchableOpacity>
   );
@@ -52,14 +54,23 @@ const StartButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: 100,
-    height: 40,
+    width: 125,
+    height: 55,
+    flexDirection: 'row',
     backgroundColor: 'white',
-    borderWidth: 2,
+    borderWidth: 3.5,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 2,
+  },
+  text: {
+    textTransform: 'uppercase',
+    fontSize: 28,
+    letterSpacing: '0.5',
+    textShadowColor: 'rgba(0, 0, 0, 0.25)', // Shadow color
+    textShadowOffset: { width: 0, height: 4 }, // Shadow offset
+    textShadowRadius: 4, // Shadow blur radius
   },
   arrowContainer: {
     width: 20,

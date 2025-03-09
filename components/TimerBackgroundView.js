@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-const BackgroundView = () => {
+const TimerBackgroundView = () => {
   return (
     <View style={styles.container}>
       {/* Top Section (45%) */}
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BackgroundView;
+export default TimerBackgroundView;
