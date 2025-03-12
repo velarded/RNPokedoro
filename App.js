@@ -21,22 +21,6 @@ const App = () => {
     loadFont();
   }, []);
 
-  // run every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        console.log(prevProgress, duration);
-        return (prevProgress < duration ? (prevProgress + 1) : 0);
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handlePress = () => {
-    console.log('Start Button Pressed!');
-  };
-
   return (
     <>
     <StatusBar style='light'/>

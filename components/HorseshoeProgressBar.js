@@ -10,7 +10,7 @@ const HorseshoeProgressBar = ({ progress, duration }) => {
       toValue: progress,
       duration: duration,
       easing: Easing.linear,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   }, [progress, duration]);
 
@@ -111,7 +111,6 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const styles = StyleSheet.create({ 
   container: {
-    
   },
 });
 export default HorseshoeProgressBar;
