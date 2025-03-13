@@ -26,7 +26,7 @@ const Timer = () => {
   const [timerIsActive, setTimerIsActive] = useState(false); 
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null); // Store the interval ID
-
+  const [isTimerDone, setIsTimerDone] = useState(false);
 
   // Function to start the interval
   const startTimer = () => {
@@ -36,16 +36,29 @@ const Timer = () => {
     const id = setInterval(() => {
         setProgress((prevProgress) => {
           console.log('setInterval: ', prevProgress, duration);
+          console.log('intervalId: ', intervalId);
+            if (duration === prevProgress) {
+                startEggHatching(id);
+            }
           return (prevProgress < duration ? (prevProgress + 1) : prevProgress);
         });
       }, 1000);
-
     setIntervalId(id); // Save the interval ID
   };
 
   // Function to stop the interval
   const stopTimer = () => {
+    console.log('stop the timer, intervalId=', intervalId);
     setTimerIsActive(false);
+    if (intervalId) {
+      clearInterval(intervalId); // Clear the interval
+      setIntervalId(null); // Reset the interval ID
+    }
+  };
+
+  const startEggHatching = (intervalId) => {
+    setIsTimerDone(true);
+    console.log('start egg hatching');
     if (intervalId) {
       clearInterval(intervalId); // Clear the interval
       setIntervalId(null); // Reset the interval ID
@@ -71,7 +84,11 @@ const Timer = () => {
   };
 
     const remainingTime = formatTime(duration - progress);
-    const isTimerDone = duration - progress === 0;
+    console.log('duration: ', duration);
+    console.log('progress: ', progress);
+    console.log('isTimerDone: ', isTimerDone);
+    console.log('isTimerActive: ', timerIsActive);
+
     return (
         <Pressable style={styles.timerContainer} onLongPress={resetTimer}>
             <TimerBackgroundView timerIsActive={timerIsActive}/>
