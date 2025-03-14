@@ -1,6 +1,6 @@
-import { View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { View, Image, StyleSheet, Animated, Pressable } from 'react-native';
 import HorseshoeProgressBar from './HorseshoeProgressBar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import StartButton from './StartButton';
 import CustomText from './CustomText';
 import TimerBackgroundView from './TimerBackgroundView';
@@ -27,6 +27,8 @@ const Timer = () => {
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null); // Store the interval ID
   const [isTimerDone, setIsTimerDone] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Initial opacity value
+
 
   // Function to start the interval
   const startTimer = () => {
@@ -63,6 +65,11 @@ const Timer = () => {
       clearInterval(intervalId); // Clear the interval
       setIntervalId(null); // Reset the interval ID
     }
+    Animated.timing(fadeAnim, {
+      toValue: 0, // Fade to fully transparent
+      duration: 300, // Animation duration in milliseconds
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
   };
 
   // Cleanup the interval when the component unmounts
@@ -75,7 +82,7 @@ const Timer = () => {
   }, [intervalId]);
 
   const resetTimer = () => {
-    if(timerIsActive) {
+    if(timerIsActive && !isTimerDone) {
         console.log('reset the timer');
         stopTimer();
         setProgress(0);
@@ -95,17 +102,17 @@ const Timer = () => {
             <Image style={styles.eggImg} source={require('../assets/pokemon-egg.gif')}/>
             { isTimerDone && <DialogBox>Oh?! Your egg is hatching</DialogBox> }
             <View style={styles.wrapper}>
-                <View>
-                { !isTimerDone && <HorseshoeProgressBar progress={progress} duration={duration}/> }
-                <View style={styles.contentContainer}>
-                    { !isTimerDone && <View style={styles.timerContentInfo}>
-                        <CustomText style={styles.timerText}>{remainingTime}</CustomText> 
-                        { !timerIsActive && <StartButton onPress={startTimer}/> } 
-                        { timerIsActive && <StopButton onPress={stopTimer}/> }
-                        { timerIsActive && <CustomText style={styles.holdToResetText}>Hold to reset</CustomText>}
-                    </View> }
-                </View>
-                </View>
+                <Animated.View style={{ opacity: fadeAnim }}>
+                  <HorseshoeProgressBar progress={progress} duration={duration}/>
+                  <View style={styles.contentContainer}>
+                      <View style={styles.timerContentInfo}>
+                          <CustomText style={styles.timerText}>{remainingTime}</CustomText> 
+                          { !timerIsActive && <StartButton onPress={startTimer}/> } 
+                          { timerIsActive && <StopButton onPress={stopTimer}/> }
+                          { timerIsActive && <CustomText style={styles.holdToResetText}>Hold to reset</CustomText>}
+                      </View> 
+                  </View>
+                </Animated.View>
             </View>
         </Pressable>
     );

@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import Timer from './components/Timer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 const App = () => {
-  const duration = 1500;
-  const [progress, setProgress] = useState(0);
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
