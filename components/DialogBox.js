@@ -1,17 +1,21 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Pressable } from "react-native";
 import CustomText from "./CustomText";
 import BouncingArrow from "./BouncingArrow";
 
-const DialogBox = ({children}) => {
+const DialogBox = ({onPress, children}) => {
+  const onPressHandler = () => {
+    onPress();
+  };
+    
     return (
-        <View style={styles.dialogContainer}>
+        <Pressable onPress={onPressHandler} style={styles.dialogContainer}>
             <View style={styles.whiteBorder}>
                 <View style={styles.textContainer}>
                     <CustomText style={styles.text}>{children}</CustomText>
                     <BouncingArrow />
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 };
 
