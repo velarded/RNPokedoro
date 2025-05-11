@@ -35,7 +35,30 @@ const App = () => {
         <Timer />
       </View> */}
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Timer" screenOptions={
+      <Stack.Navigator
+        mode="modal"
+        screenOptions={{
+          headerShown: false,
+          cardStyle: { backgroundColor: 'rgba(15, 15, 15, 0.75)' },
+          cardOverlayEnabled: true,
+          cardStyleInterpolator: ({ current }) => ({
+            cardStyle: {
+              opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            },
+            overlayStyle: {
+              opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.85],
+                extrapolate: 'clamp',
+              }),
+            },
+          }),
+        }}
+      >
+        {/* <Stack.Navigator initialRouteName="Timer" screenOptions={
           {
             headerShown: false, 
             animationEnabled: false, // Disables transition animations
@@ -44,7 +67,7 @@ const App = () => {
               open: { animation: 'timing', config: { duration: 0 } },
               close: { animation: 'timing', config: { duration: 0 } },
             },
-          }}>
+          }}> */}
           <Stack.Screen name="Timer" component={TimerSliderView} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />

@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import CustomText from "./CustomText";
+import CustomText from "./shared/CustomText";
 import BouncingArrow from "./BouncingArrow";
 
 const DialogBox = ({onPress, children}) => {

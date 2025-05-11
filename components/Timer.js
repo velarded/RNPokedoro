@@ -2,7 +2,7 @@ import { View, Image, StyleSheet, Animated, Pressable } from 'react-native';
 import HorseshoeProgressBar from './HorseshoeProgressBar';
 import React, { useState, useEffect, useRef } from 'react';
 import StartButton from './StartButton';
-import CustomText from './CustomText';
+import CustomText from './shared/CustomText';
 import TimerBackgroundView from './TimerBackgroundView';
 import StopButton from './StopButton';
 import DialogBox from './DialogBox';

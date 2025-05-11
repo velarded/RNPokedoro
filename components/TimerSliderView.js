@@ -9,7 +9,7 @@ const TimerSliderView = () => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <EnhancedRuler
           minValue={0}
-          maxValue={40}
+          maxValue={120}
           step={1}
           initialValue={0}
           onValueChange={setValue}

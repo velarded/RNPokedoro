@@ -1,18 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Dimensions, AccessibilityInfo, Platform } from 'react-native';
+import CustomText from './shared/CustomText';
+import Svg, { G, Path } from 'react-native-svg';
 
 const EnhancedRuler = ({
   minValue = 0,
   maxValue = 100,
   step = 1,
   width = Dimensions.get('window').width,
-  height = 120,
-  segmentWidth = 40,
-  indicatorColor = 'red',
+  height = 80,
+  segmentWidth = 30,
+  indicatorColor = '#fff',
   initialValue = 50,
   onValueChange,
 }) => {
   const scrollViewRef = useRef(null);
+  const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
+
   const [selectedValue, setSelectedValue] = useState(initialValue);
   const [contentOffset, setContentOffset] = useState(0);
 
@@ -42,26 +46,36 @@ const EnhancedRuler = ({
 
   const renderSegments = () => {
     const segments = [];
-    console.log('min value: ', minValue);
-    console.log('max value: ', maxValue);
-    console.log('ruler width: ', rulerWidth);
-    console.log('total segments: ', totalSegments);
     for (let i = 0; i <= totalSegments; i++) {
       const value = minValue + i * step;
       const isMajorTick = value % (step * 5) === 0;
       const isSelected = i === selectedValue;
-    //   const backgroundColour = i % 2 == 0 ? 'red' : 'blue';
+      const backgroundColour = i % 2 == 0 ? 'red' : 'blue';
 
       segments.push(
         <View key={`segment-${i}`} style={[styles.segment, { width: segmentWidth }]}>
           {isMajorTick && (
-            <Text style={styles.tickLabel}>{value}</Text>
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row', // Needed for inline content
+                flexShrink: 0, // Prevent shrinking
+                flexGrow: 0, // Prevent growing
+                alignSelf: 'center', // Override parent's alignItems
+                width: 60,
+              }}>
+            <CustomText style={[styles.tickLabel, { color: isSelected ? indicatorColor : '#959595', fontSize: isSelected ? 60 : 45 }]}>{value}</CustomText>
+          </View>
+          )} 
+         {!isMajorTick && (
+            <CustomText style={styles.tickLabel}></CustomText>
           )}
           <View style={[
             styles.tick,
             {
-              height: isMajorTick ? 30 : 20,
-              backgroundColor: isSelected ? indicatorColor : (isMajorTick ? '#333' : '#999'),
+              height: isMajorTick ? 45 : isSelected ? 42 : 28,
+              backgroundColor: isSelected ? indicatorColor : '#959595',
+              width: isSelected ? 9 : isSelected ? 7 : 5,
             }
           ]} />
         </View>
@@ -93,10 +107,15 @@ const EnhancedRuler = ({
       
       {/* Arrow and value indicator */}
       <View style={[styles.indicatorContainer, { left: width / 2 }]}>
-        <View style={[styles.arrow, { borderTopColor: indicatorColor }]} />
-        <View style={styles.valueBox}>
+        {/* <View style={[styles.arrow, { borderTopColor: indicatorColor }]} /> */}
+        <Svg width="20" height="15" viewBox="0 0 20 15">
+            <G>
+            <Path d="M9.96393 0.896L4.00056 8.60487V12L16.125 12V8.60487L9.96393 0.896Z" fill="#DE3140" stroke="white" strokeWidth="2.5"/>
+            </G>
+        </Svg>
+        {/* <View style={styles.valueBox}>
           <Text style={styles.valueText}>{selectedValue}</Text>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -104,29 +123,33 @@ const EnhancedRuler = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 120,
+    height: 170,
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(15, 15, 15, 0.85)',
     marginTop: 20,
     position: 'relative',
   },
   segment: {
     alignItems: 'center',
     justifyContent: 'flex-start',
+    overflow: 'visible',
   },
   tick: {
-    width: 2,
     marginTop: 5,
+    borderRadius: 1,
   },
   tickLabel: {
-    marginBottom: 5,
-    fontSize: 12,
+    height: 60,
     fontWeight: 'bold',
-    color: '#333',
+  },
+  selectedTick: {
+    width: 9.5,
+    height: 42,
+    backgroundColor: '#fff',
   },
   indicatorLine: {
     position: 'absolute',
-    height: 40,
+    height: 120,
     width: 2,
     backgroundColor: 'red',
     top: 20,
@@ -134,8 +157,9 @@ const styles = StyleSheet.create({
   indicatorContainer: {
     position: 'absolute',
     bottom: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ translateX: -15 }],
+    transform: [{ translateX: -10 }],
   },
   arrow: {
     width: 0,
