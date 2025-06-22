@@ -2,10 +2,12 @@ import { View, Image, StyleSheet, Animated, Pressable } from 'react-native';
 import HorseshoeProgressBar from './HorseshoeProgressBar';
 import React, { useState, useEffect, useRef } from 'react';
 import StartButton from './StartButton';
-import CustomText from './CustomText';
+import CustomText from './shared/CustomText';
 import TimerBackgroundView from './TimerBackgroundView';
 import StopButton from './StopButton';
 import DialogBox from './DialogBox';
+import { useNavigation } from '@react-navigation/native';
+import EnhancedRuler from './EnhancedRuler';
 
 const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -21,14 +23,15 @@ const formatTime = (seconds) => {
 
   
 const Timer = () => {
+  const navigation = useNavigation();
+
 //   const duration = 1500;
-  const duration = 10;
+  const [duration, setDuration] = useState(3);
   const [timerIsActive, setTimerIsActive] = useState(false); 
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null); // Store the interval ID
   const [isTimerDone, setIsTimerDone] = useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current; // Initial opacity value
-
 
   // Function to start the interval
   const startTimer = () => {
@@ -40,7 +43,7 @@ const Timer = () => {
           console.log('setInterval: ', prevProgress, duration);
           console.log('intervalId: ', intervalId);
             if (duration === prevProgress) {
-                startEggHatching(id);
+              showEggHatchingDialogBox(id);
             }
           return (prevProgress < duration ? (prevProgress + 1) : prevProgress);
         });
@@ -58,7 +61,7 @@ const Timer = () => {
     }
   };
 
-  const startEggHatching = (intervalId) => {
+  const showEggHatchingDialogBox = (intervalId) => {
     setIsTimerDone(true);
     console.log('start egg hatching');
     if (intervalId) {
@@ -70,6 +73,10 @@ const Timer = () => {
       duration: 300, // Animation duration in milliseconds
       useNativeDriver: true, // Use native driver for better performance
     }).start();
+  };
+
+  const changeToEggHatchingScreen = () => {
+    navigation.navigate('EggHatching');
   };
 
   // Cleanup the interval when the component unmounts
@@ -96,11 +103,17 @@ const Timer = () => {
     console.log('isTimerDone: ', isTimerDone);
     console.log('isTimerActive: ', timerIsActive);
 
+    const onSelectedTimerDuration = (selectedTimerDuration) => {
+      setDuration(selectedTimerDuration * 60);
+    };
+
     return (
+      <>
+        <EnhancedRuler onValueChange={onSelectedTimerDuration}/>
         <Pressable style={styles.timerContainer} onLongPress={resetTimer}>
             <TimerBackgroundView timerIsActive={timerIsActive}/>
             <Image style={styles.eggImg} source={require('../assets/pokemon-egg.gif')}/>
-            { isTimerDone && <DialogBox>Oh?! Your egg is hatching</DialogBox> }
+            { isTimerDone && <DialogBox onPress={changeToEggHatchingScreen}>Oh?! Your egg is hatching</DialogBox> }
             <View style={styles.wrapper}>
                 <Animated.View style={{ opacity: fadeAnim }}>
                   <HorseshoeProgressBar progress={progress} duration={duration}/>
@@ -115,6 +128,7 @@ const Timer = () => {
                 </Animated.View>
             </View>
         </Pressable>
+        </>
     );
 };
 

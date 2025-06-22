@@ -1,15 +1,15 @@
 // StartButton.js
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import CustomText from './shared/CustomText';
 import { Audio } from 'expo-av';
-import BouncingArrow from './BouncingArrow';
+import BouncingArrow from '../BouncingArrow';
+import CustomText from './CustomText';
 
 const fontSize = 28; // Your font size
 const letterSpacingPercentage = 3; // 5.5%
 const letterSpacing = fontSize * (letterSpacingPercentage / 100); // Calculate letter spacing
 
-const StartButton = ({ onPress }) => {
+const CustomButton = ({ onPress, label }) => {
   const [sound, setSound] = useState();
 
   const onPressHandler = async () => {
@@ -29,7 +29,7 @@ const StartButton = ({ onPress }) => {
   const playSound = async () => {
     try {
       const { sound: soundObject } = await Audio.Sound.createAsync(
-        require('../assets/button-press.mp3') 
+        require('../../assets/button-press.mp3') 
       );
       setSound(soundObject);
 
@@ -41,7 +41,7 @@ const StartButton = ({ onPress }) => {
 
   return (
     <TouchableOpacity style={styles.button} onPress={onPressHandler}>
-        <CustomText style={styles.text}>Start</CustomText>
+        <CustomText style={styles.text}>{label}</CustomText>
         <BouncingArrow />
     </TouchableOpacity>
   );
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StartButton;
+export default CustomButton;

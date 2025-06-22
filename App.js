@@ -5,7 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import Timer from './components/Timer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import EggHatchingView from './components/EggHatchingView';
+import PokemonRevealView from './components/PokemonRevealView';
+import { PokemonGifProvider } from './components/context/PokemonGifContext';
+import TimerSliderView from './components/TimerSliderView';
 
+
+// Create a stack navigator
+const Stack = createStackNavigator();
 
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -22,13 +29,41 @@ const App = () => {
   }, []);
 
   return (
-    <>
-    <StatusBar style='light'/>
-    <View style={styles.appContainer}>
-      {/* <Header /> */}
-      <Timer />
-    </View>
-    </>
+    <PokemonGifProvider>
+      <StatusBar style='light'/>
+      {/* <View style={styles.appContainer}>
+        <Timer />
+      </View> */}
+      <NavigationContainer>
+      <Stack.Navigator
+        mode="modal"
+        screenOptions={{
+          headerShown: false,
+          cardStyle: { backgroundColor: 'rgba(15, 15, 15, 0.75)' },
+          cardOverlayEnabled: true,
+          cardStyleInterpolator: ({ current }) => ({
+            cardStyle: {
+              opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+              }),
+            },
+            overlayStyle: {
+              opacity: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.85],
+                extrapolate: 'clamp',
+              }),
+            },
+          }),
+        }}
+      >
+          <Stack.Screen name="Timer" component={Timer} />
+          <Stack.Screen name="EggHatching" component={EggHatchingView} />
+          <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PokemonGifProvider>
   );
 };
 

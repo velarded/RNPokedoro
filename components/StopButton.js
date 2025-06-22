@@ -1,7 +1,7 @@
 // StartButton.js
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Animated, Easing } from 'react-native';
-import CustomText from './CustomText';
+import CustomText from './shared/CustomText';
 import { Audio } from 'expo-av';
 import BouncingArrow from './BouncingArrow';
 
