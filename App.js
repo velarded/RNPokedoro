@@ -58,16 +58,6 @@ const App = () => {
           }),
         }}
       >
-        {/* <Stack.Navigator initialRouteName="Timer" screenOptions={
-          {
-            headerShown: false, 
-            animationEnabled: false, // Disables transition animations
-            gestureEnabled: false,    // Disables swipe gestures
-            transitionSpec: {
-              open: { animation: 'timing', config: { duration: 0 } },
-              close: { animation: 'timing', config: { duration: 0 } },
-            },
-          }}> */}
           <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />

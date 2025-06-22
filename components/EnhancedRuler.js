@@ -99,7 +99,7 @@ const EnhancedRuler = ({
     animationType="fade"
     onRequestClose={onClose}
   >
-<BlurView intensity={40} style={styles.absolute}>
+    <BlurView intensity={40} style={styles.absolute}>
 
     <View style={styles.modalContainer}>
         <View style={[styles.container, { width }]}>
@@ -119,20 +119,13 @@ const EnhancedRuler = ({
         {renderSegments()}
       </ScrollView>
       
-      {/* Indicator line that perfectly matches ticks */}
-      {/* <View style={[styles.indicatorLine, { left: width / 2 - 1 }]} /> */}
-      
       {/* Arrow and value indicator */}
       <View style={[styles.indicatorContainer, { left: width / 2 }]}>
-        {/* <View style={[styles.arrow, { borderTopColor: indicatorColor }]} /> */}
         <Svg width="20" height="15" viewBox="0 0 20 15">
             <G>
             <Path d="M9.96393 0.896L4.00056 8.60487V12L16.125 12V8.60487L9.96393 0.896Z" fill="#DE3140" stroke="white" strokeWidth="2.5"/>
             </G>
         </Svg>
-        {/* <View style={styles.valueBox}>
-          <Text style={styles.valueText}>{selectedValue}</Text>
-        </View> */}
       </View>
         </View>
         <CustomButton label='Set' onPress={onClose}/>

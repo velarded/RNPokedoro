@@ -26,8 +26,6 @@ const EggHatchingView = () => {
             <View style={styles.videoContainer}>
 
                 <View style={styles.circle}>
-            {/* <Image style={styles.video} source={require('../assets/egg-hatching.gif')}/> */}
-
                     <Video
                         source={eggHatchingVideo} // replace with your own .mp4 URL
                         rate={1.0}
