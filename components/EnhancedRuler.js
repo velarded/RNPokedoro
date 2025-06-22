@@ -1,28 +1,33 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, Dimensions, AccessibilityInfo, Platform } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Dimensions, AccessibilityInfo, Platform, Modal } from 'react-native';
 import CustomText from './shared/CustomText';
 import Svg, { G, Path } from 'react-native-svg';
+import { BlurView } from 'expo-blur';
+import CustomButton from './shared/CustomButton';
 
 const EnhancedRuler = ({
-  minValue = 0,
+  minValue = 1,
   maxValue = 100,
   step = 1,
   width = Dimensions.get('window').width,
   height = 80,
   segmentWidth = 30,
   indicatorColor = '#fff',
-  initialValue = 50,
+  initialValue = 25,
   onValueChange,
+  
 }) => {
   const scrollViewRef = useRef(null);
   const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   const [selectedValue, setSelectedValue] = useState(initialValue);
   const [contentOffset, setContentOffset] = useState(0);
 
-  const totalSegments = Math.ceil((maxValue - minValue) / step);
+  const totalSegments = (maxValue - minValue) + 1;
+  console.log('total segments: ', totalSegments);
   const centerOffset = (width / 2) - (segmentWidth / 2);
-  const rulerWidth = (totalSegments + 1) * segmentWidth + centerOffset*2;
+  const rulerWidth = (totalSegments) * segmentWidth + centerOffset*2;
 
   // Initialize scroll position
   useEffect(() => {
@@ -39,19 +44,22 @@ const EnhancedRuler = ({
     const value = Math.min(maxValue, Math.max(minValue, minValue + segment * step));
     
     setSelectedValue(value);
+    console.log('selectedValue: ', value);
     if (onValueChange) {
       onValueChange(value);
     }
   };
-
+  const onClose = () => {
+    console.log('on close');
+    setVisible(false);
+  };
   const renderSegments = () => {
     const segments = [];
-    for (let i = 0; i <= totalSegments; i++) {
-      const value = minValue + i * step;
+    for (let i = minValue; i <= maxValue; i++) {
+      const value = i;
       const isMajorTick = value % (step * 5) === 0;
       const isSelected = i === selectedValue;
-      const backgroundColour = i % 2 == 0 ? 'red' : 'blue';
-
+      
       segments.push(
         <View key={`segment-${i}`} style={[styles.segment, { width: segmentWidth }]}>
           {isMajorTick && (
@@ -85,7 +93,16 @@ const EnhancedRuler = ({
   };
 
   return (
-    <View style={[styles.container, { width }]}>
+    <Modal
+    visible={visible}
+    transparent={true}
+    animationType="fade"
+    onRequestClose={onClose}
+  >
+<BlurView intensity={40} style={styles.absolute}>
+
+    <View style={styles.modalContainer}>
+        <View style={[styles.container, { width }]}>
       <ScrollView
         ref={scrollViewRef}
         horizontal
@@ -117,15 +134,32 @@ const EnhancedRuler = ({
           <Text style={styles.valueText}>{selectedValue}</Text>
         </View> */}
       </View>
+        </View>
+        <CustomButton label='Set' onPress={onClose}/>
     </View>
+    </BlurView>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
+    absolute: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+    },
+    modalContainer: {
+        flex: 1,
+    backgroundColor: 'rgba(5, 5, 5, 0.80)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 40,
+    },
   container: {
     height: 170,
     justifyContent: 'center',
-    backgroundColor: 'rgba(15, 15, 15, 0.85)',
     marginTop: 20,
     position: 'relative',
   },

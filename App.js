@@ -68,7 +68,7 @@ const App = () => {
               close: { animation: 'timing', config: { duration: 0 } },
             },
           }}> */}
-          <Stack.Screen name="Timer" component={TimerSliderView} />
+          <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />
         </Stack.Navigator>

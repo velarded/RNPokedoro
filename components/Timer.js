@@ -7,6 +7,7 @@ import TimerBackgroundView from './TimerBackgroundView';
 import StopButton from './StopButton';
 import DialogBox from './DialogBox';
 import { useNavigation } from '@react-navigation/native';
+import EnhancedRuler from './EnhancedRuler';
 
 const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -25,7 +26,7 @@ const Timer = () => {
   const navigation = useNavigation();
 
 //   const duration = 1500;
-  const duration = 3;
+  const [duration, setDuration] = useState(3);
   const [timerIsActive, setTimerIsActive] = useState(false); 
   const [progress, setProgress] = useState(0);
   const [intervalId, setIntervalId] = useState(null); // Store the interval ID
@@ -102,7 +103,13 @@ const Timer = () => {
     console.log('isTimerDone: ', isTimerDone);
     console.log('isTimerActive: ', timerIsActive);
 
+    const onSelectedTimerDuration = (selectedTimerDuration) => {
+      setDuration(selectedTimerDuration * 60);
+    };
+
     return (
+      <>
+        <EnhancedRuler onValueChange={onSelectedTimerDuration}/>
         <Pressable style={styles.timerContainer} onLongPress={resetTimer}>
             <TimerBackgroundView timerIsActive={timerIsActive}/>
             <Image style={styles.eggImg} source={require('../assets/pokemon-egg.gif')}/>
@@ -121,6 +128,7 @@ const Timer = () => {
                 </Animated.View>
             </View>
         </Pressable>
+        </>
     );
 };
 
