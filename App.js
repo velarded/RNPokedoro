@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EggHatchingView from './components/EggHatchingView';
 import PokemonRevealView from './components/PokemonRevealView';
 import { PokemonGifProvider } from './components/context/PokemonGifContext';
-import TimerSliderView from './components/TimerSliderView';
+import RegisterToPokedexView from './components/RegisterToPokedexView';
 
 
 // Create a stack navigator
@@ -31,9 +31,6 @@ const App = () => {
   return (
     <PokemonGifProvider>
       <StatusBar style='light'/>
-      {/* <View style={styles.appContainer}>
-        <Timer />
-      </View> */}
       <NavigationContainer>
       <Stack.Navigator
         mode="modal"
@@ -58,6 +55,7 @@ const App = () => {
           }),
         }}
       >
+          <Stack.Screen name="RegisterToPokedex" component={RegisterToPokedexView} />
           <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />

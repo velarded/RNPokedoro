@@ -13,7 +13,7 @@ const PokemonRevealView = () => {
 
     const changeToPokedexRegisterScreen = () => {
           console.log('move to pokedex register screen');
-        // navigation.navigate('PokemonReveal');
+        navigation.navigate('RegisterToPokedex');
     }
     return (
         <EggHatchingBackground>

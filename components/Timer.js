@@ -104,7 +104,8 @@ const Timer = () => {
     console.log('isTimerActive: ', timerIsActive);
 
     const onSelectedTimerDuration = (selectedTimerDuration) => {
-      setDuration(selectedTimerDuration * 60);
+      // setDuration(selectedTimerDuration * 60);
+      
     };
 
     return (
