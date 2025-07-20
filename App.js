@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import Timer from './components/Timer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import EggHatchingView from './components/EggHatchingView';
 import PokemonRevealView from './components/PokemonRevealView';
 import { PokemonGifProvider } from './components/context/PokemonGifContext';
 import RegisterToPokedexView from './components/RegisterToPokedexView';
+import Timer from './components/timer/Timer';
 
 
 // Create a stack navigator

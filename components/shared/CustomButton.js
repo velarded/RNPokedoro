@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
-import BouncingArrow from '../BouncingArrow';
+import BouncingArrow from './BouncingArrow';
 import CustomText from './CustomText';
 
 const fontSize = 28; // Your font size

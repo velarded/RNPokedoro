@@ -2,7 +2,7 @@ import { View, StyleSheet, Image } from "react-native";
 import EggHatchingBackground from "./shared/EggHatchingBackground";
 import { useContext } from "react";
 import { PokemonGifContext } from "./context/PokemonGifContext";
-import DialogBox from "./DialogBox";
+import DialogBox from "./shared/DialogBox";
 import { useNavigation } from "@react-navigation/native";
 
 const PokemonRevealView = () => {

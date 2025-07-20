@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, StyleSheet, Animated, Easing } from 'react-native';
 import CustomText from './shared/CustomText';
 import { Audio } from 'expo-av';
-import BouncingArrow from './BouncingArrow';
+import BouncingArrow from './shared/BouncingArrow';
 
 const fontSize = 28; // Your font size
 const letterSpacingPercentage = 3; // 5.5%

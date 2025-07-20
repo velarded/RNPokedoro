@@ -9,17 +9,16 @@ import { PokemonGifContext } from "./context/PokemonGifContext";
 const EggHatchingView = () => {
     const navigation = useNavigation();
     const videoRef = useRef(null);
-    const { setGifToLoad, setHatchedPokemonName } = useContext(PokemonGifContext);
-
 
     const handlePlaybackStatusUpdate = (status) => {
         if (status.didJustFinish) {
           console.log('egg hatching animation is done!');
           setGifToLoad(require('../assets/pikachu-sprite.gif'));
           setHatchedPokemonName('Pikachu')
+          setHatchedPokemonDexNumber(25);
             navigation.navigate('PokemonReveal');
         }    
-    }
+    };
 
     return (
     <EggHatchingBackground>
