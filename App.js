@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EggHatchingView from './components/EggHatchingView';
 import PokemonRevealView from './components/PokemonRevealView';
 import { PokemonGifProvider } from './components/context/PokemonGifContext';
-import RegisterToPokedexView from './components/RegisterToPokedexView';
+import RegisterToPokedexView from './components/pokedex-register/RegisterToPokedexView';
 import Timer from './components/timer/Timer';
 
 

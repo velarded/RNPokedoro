@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Svg, { Circle, Path } from "react-native-svg";
-import RegisterPokedexPokemonCard from "./pokedex-register/RegisterPokedexPokemonCard";
-import RegisterPokedexInfoCard from "./pokedex-register/RegisterPokedexInfoCard";
+import RegisterPokedexPokemonCard from "./RegisterPokedexPokemonCard";
+import RegisterPokedexInfoCard from "./RegisterPokedexInfoCard";
 
 const {width, height} = Dimensions.get('window');
 
