@@ -9,6 +9,7 @@ import PokemonRevealView from './components/PokemonRevealView';
 import { PokemonGifProvider } from './components/context/PokemonGifContext';
 import RegisterToPokedexView from './components/pokedex-register/RegisterToPokedexView';
 import Timer from './components/timer/Timer';
+import PokedexView from './components/pokedex/PokedexView';
 
 
 // Create a stack navigator
@@ -55,7 +56,7 @@ const App = () => {
           }),
         }}
       >
-          <Stack.Screen name="RegisterToPokedex" component={RegisterToPokedexView} />
+          <Stack.Screen name="RegisterToPokedex" component={PokedexView} />
           <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />
