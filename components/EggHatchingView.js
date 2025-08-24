@@ -7,8 +7,10 @@ import { useNavigation } from '@react-navigation/native';
 import { PokemonGifContext } from "./context/PokemonGifContext";
 
 const EggHatchingView = () => {
+    const { setGifToLoad, setHatchedPokemonName, setHatchedPokemonDexNumber } = useContext(PokemonGifContext);
     const navigation = useNavigation();
     const videoRef = useRef(null);
+    
 
     const handlePlaybackStatusUpdate = (status) => {
         if (status.didJustFinish) {

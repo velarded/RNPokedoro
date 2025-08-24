@@ -56,10 +56,10 @@ const App = () => {
           }),
         }}
       >
-          <Stack.Screen name="RegisterToPokedex" component={PokedexView} />
           <Stack.Screen name="Timer" component={Timer} />
           <Stack.Screen name="EggHatching" component={EggHatchingView} />
           <Stack.Screen name="PokemonReveal" component={PokemonRevealView} />
+          <Stack.Screen name="RegisterToPokedex" component={PokedexView} />
         </Stack.Navigator>
       </NavigationContainer>
     </PokemonGifProvider>

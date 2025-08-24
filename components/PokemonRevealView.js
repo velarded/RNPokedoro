@@ -3,7 +3,7 @@ import EggHatchingBackground from "./shared/EggHatchingBackground";
 import { useContext } from "react";
 import { PokemonGifContext } from "./context/PokemonGifContext";
 import DialogBox from "./shared/DialogBox";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 
 const PokemonRevealView = () => {
     const navigation = useNavigation();
