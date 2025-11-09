@@ -1,67 +1,46 @@
-import { Dimensions, StyleSheet, View } from "react-native";
-import Svg, { Circle, Path } from "react-native-svg";
+import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
+import Svg, { Circle, Line, Path, Polygon } from "react-native-svg";
 import CustomText from '../shared/CustomText';
+import { useContext, useRef, useState } from "react";
+import { PokemonGifContext } from "../context/PokemonGifContext";
+import { globalStyles } from "../../styles/global";
+import { pokedexList } from "../../assets/data/pokedexList";
+import PokedexList from "./TestPokedexList";
+import PokedexUserStats from "./PokedexUserStats";
+import { PokedexBackground } from "./PokedexBackground";
 
-const {width, height} = Dimensions.get('window');
+const PokedexView = () => {
+    let { gifToLoad, hatchedPokemonName, hatchedPokemonDexNumber } = useContext(PokemonGifContext);
 
-const PokedexView = ({ size = 120}) => {
-    const center = size / 2;
-    const ringCount = 2; // Target logo has 3 rings
-    const ringWidth = size / (ringCount * 2 + 2); // Calculate ring width
+    // TODO: remove after context is dynamic
+    gifToLoad = require('../../assets/pikachu-sprite.gif');
+    hatchedPokemonName = 'Pikachu';
+    hatchedPokemonDexNumber = 25;
 
     return (
         <View style={styles.mainContainer}>
-            <View style={[styles.bgContainer]}>
-                <Svg width={size} height={size} style={styles.pokeballBgLogo}>
-            {/* Outer most ring */}
-            <Circle
-                cx={center}
-                cy={center}
-                r={center - ringWidth * 0}
-                fill={'#000028'}
-            />
-            
-
-            {/* Add a horizontal straight line */}
-            <Path
-            d={`M ${0} ${size / 2} L ${size} ${size / 2}`}
-            stroke="#394EBF"
-            strokeWidth={15}
-            />
-
-            {/* 2nd outer ring */}
-            <Circle
-                cx={center}
-                cy={center}
-                r={center - ringWidth * 1.25}
-                fill="#394EBF"
-            />
-            {/* Middle red ring */}
-            <Circle
-                cx={center}
-                cy={center}
-                r={center - ringWidth * 2 + 5 }
-                fill={'#000028'}
-            />
-                
-            {/* Hide half of the pokeball logo */}
-            <Path
-            d={`M ${size / 4} ${0} L ${size / 4} ${size}`}
-            stroke="#394EBF"
-            strokeWidth={size / 2 }
-            /> 
-                </Svg>
-            </View>
+            <PokedexBackground />
             <View style={styles.contentContainer}>
                 <View style={styles.titleContainer}>
                     <CustomText style={styles.pokedexTitle}>POKÉDEX</CustomText>
                 </View>
-
                 <View style={styles.columnContent}>
-                    <CustomText>Col 1</CustomText>
-                </View>
-                <View style={styles.columnContent}>
-                    <CustomText>Col 2</CustomText>
+                    <View style={styles.leftColumn}>
+                        <View style={styles.pokemonSpriteOuter}>
+                            <View style={styles.pokemonSpriteInner}>
+                                { gifToLoad && <Image style={styles.pokemonGif} source={gifToLoad}/> }
+                            </View>
+                            {/* <View style={styles.whiteArrow}></View> */}
+                            <Svg style={styles.whiteArrow} width={25} height={25 * 2} viewBox="0 0 16 32">
+                                    <Polygon
+                                    points="0,0 16,16 0,32"
+                                    fill="white"
+                                    />
+                            </Svg>
+                        </View>
+                        <PokedexUserStats />
+                    </View>
+                    <PokedexList />
                 </View>
             </View>
         </View>
@@ -69,44 +48,92 @@ const PokedexView = ({ size = 120}) => {
 };
 
 const styles = StyleSheet.create({
-    mainContainer: {
+     mainContainer: {
         flex: 1,
+        width: '100vw',
+        height: '100vh',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center', //fix this
         backgroundColor: '#394EBF', // Set your desired background color
-    },
-    bgContainer: {
-        position: 'absolute',
-        width: width,
-        height: height,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    pokeballBgLogo: {
-        right: '50%',
-        transform: [{ scale: 3}],
+        position: 'relative',
     },
     contentContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'rgba(255, 0 ,0, 0.5)',
+        width: '70%',
+        height: '80%',
+        // backgroundColor: 'rgba(255, 0 ,0, 0.5)',
+        gap: 15,
     },
     titleContainer: {
-        backgroundColor: '#F8F8F8',
-        borderRadius: 3.75,
-        paddingHorizontal: 10,
+        alignItems: 'center'
     },
     pokedexTitle: {
+        backgroundColor: '#F8F8F8',
+        borderRadius: 3.75,
+        padding: 10,
         fontSize: 80,
         letterSpacing: -2,
         textShadowColor: 'rgba(0, 0, 0, 0.75)',
         textShadowOffset: {width: 1, height: 1},
         textShadowRadius: 0,
-        transform: [{ scaleY: 0.5 }]
+        transform: [{ scaleY: 0.5}]
     },
     columnContent: {
-        flex: 0.5,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        gap: 5,
+        // backgroundColor: 'rgba(0, 255 ,0, 1)',
+    },
+    leftColumn: {
+        flex: 1,
+        alignItems: 'center',
+        // backgroundColor: 'rgba(10, 255, 255, 1)',
+        position: 'relative',
+        gap: 5,
+        zIndex: 999,
+    },
+    section: {
+        alignItems: 'center',
+        gap: 5,
+        color: 'white',
+    },
+    pokedexList: {
+        padding: 5,
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#EDC721',
+        borderRadius: 10,
+        width: '25%'
+    },
+    pokemonSpriteOuter: {
+        width: '100%',
+        borderRadius: 10,
+        borderColor: 'white',
+        borderWidth: 3.5,
+        backgroundColor: 'white',
+        position: 'relative',
+    },
+    whiteArrow: {
+        position: 'absolute',
+        // width: 50,
+        // height: 50,
+        // backgroundColor: 'black',
+        right: -25,
+        top: '50%',
+        marginTop: -25,
+        // transform: 'translateX(150%), translateY(50%)'
+        zIndex: 999,
+    },
+    pokemonSpriteInner: {
+        height: 150,
+        borderRadius: 10,
+        borderColor: 'black',
+        borderWidth: 3.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pokemonGif: {
+        transform: 'scale(1.5)'
     },
 });
 

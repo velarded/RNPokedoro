@@ -27,7 +27,7 @@ const EnhancedRuler = ({
   const totalSegments = (maxValue - minValue) + 1;
   console.log('total segments: ', totalSegments);
   const centerOffset = (width / 2) - (segmentWidth / 2);
-  const rulerWidth = (totalSegments) * segmentWidth + centerOffset*2;
+  const rulerWidth = (totalSegments) * segmentWidth + centerOffset * 2;
 
   // Initialize scroll position
   useEffect(() => {
