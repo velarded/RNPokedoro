@@ -35,34 +35,58 @@ const PokedexList = () => {
   const scrollViewRef = useRef(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const itemSize = 80;
-  const spacerSize = (height - itemSize) / 2;
+  const scrollContainerHeight = height * 0.5;
+  
+  // Calculate the center position for the selector
+  const centerPosition = (scrollContainerHeight - itemSize) / 2;
 
-  // Scroll to selected item
+  // Set initial scroll position when component mounts
   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (scrollViewRef.current) {
+        const initialScrollY = (selectedId - 1) * itemSize;
+        scrollViewRef.current.scrollTo({
+          y: initialScrollY,
+          animated: false
+        });
+        // Set the scrollY value manually for animations
+        scrollY.setValue(initialScrollY);
+      }
+    }, 150);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  // Scroll to selected item when selection changes
+  const scrollToSelected = (id) => {
     if (scrollViewRef.current) {
+      const targetY = (id - 1) * itemSize;
       scrollViewRef.current.scrollTo({
-        y: (selectedId - 1) * itemSize,
+        y: targetY,
         animated: true
       });
     }
-  }, [selectedId]);
+  };
 
   // Handle scroll events
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: true }
+    { useNativeDriver: false }
   );
 
-  // Handle momentum scroll end to snap to nearest item
-  const handleMomentumScrollEnd = (e) => {
+  // Handle scroll end to update selection
+  const handleScrollEnd = (e) => {
     const offsetY = e.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / itemSize);
-    setSelectedId(Math.min(Math.max(1, index + 1), POKEMON_DATA.length));
+    const newSelectedId = Math.min(Math.max(1, index + 1), POKEMON_DATA.length);
+    
+    if (newSelectedId !== selectedId) {
+      setSelectedId(newSelectedId);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>POKÉDEX</Text>
       
       <View style={styles.contentContainer}>
         {/* White Arrow Component (sibling) */}
@@ -77,7 +101,7 @@ const PokedexList = () => {
           </View>
           
           {/* Pokemon list */}
-          <View style={styles.scrollContainer}>
+          <View style={[styles.scrollContainer,]}>
             <Animated.ScrollView
               ref={scrollViewRef}
               showsVerticalScrollIndicator={false}
@@ -85,30 +109,32 @@ const PokedexList = () => {
               decelerationRate="fast"
               onScroll={handleScroll}
               scrollEventThrottle={16}
-              onMomentumScrollEnd={handleMomentumScrollEnd}
+              onMomentumScrollEnd={handleScrollEnd}
+              onScrollEndDrag={handleScrollEnd}
               contentContainerStyle={{
-                paddingTop: spacerSize,
-                paddingBottom: spacerSize,
+                top: 78.5 - 40
               }}
             >
               {POKEMON_DATA.map((pokemon, index) => {
+                const itemPosition = index * itemSize;
+                
                 const inputRange = [
-                  (index - 2) * itemSize,
-                  (index - 1) * itemSize,
-                  index * itemSize,
-                  (index + 1) * itemSize,
-                  (index + 2) * itemSize,
+                  itemPosition - itemSize * 2,
+                  itemPosition - itemSize,
+                  itemPosition,
+                  itemPosition + itemSize,
+                  itemPosition + itemSize * 2,
                 ];
                 
                 const scale = scrollY.interpolate({
                   inputRange,
-                  outputRange: [0.8, 0.9, 1, 0.9, 0.8],
+                  outputRange: [0.7, 0.85, 1, 0.85, 0.7],
                   extrapolate: 'clamp',
                 });
                 
                 const opacity = scrollY.interpolate({
                   inputRange,
-                  outputRange: [0.5, 0.7, 1, 0.7, 0.5],
+                  outputRange: [0.4, 0.7, 1, 0.7, 0.4],
                   extrapolate: 'clamp',
                 });
                 
@@ -117,7 +143,10 @@ const PokedexList = () => {
                 return (
                   <TouchableOpacity 
                     key={pokemon.id}
-                    onPress={() => setSelectedId(pokemon.id)}
+                    onPress={() => {
+                      setSelectedId(pokemon.id);
+                      scrollToSelected(pokemon.id);
+                    }}
                     activeOpacity={0.7}
                   >
                     <Animated.View style={[
@@ -128,7 +157,8 @@ const PokedexList = () => {
                         opacity,
                         borderColor: isSelected ? '#FFCC00' : 'transparent',
                         borderWidth: isSelected ? 3 : 0,
-                        elevation: isSelected ? 10 : 2,
+                        shadowOpacity: isSelected ? 0.4 : 0.2,
+                        zIndex: isSelected ? 1 : 0,
                       }
                     ]}>
                       <Image 
@@ -141,6 +171,11 @@ const PokedexList = () => {
                         <Text style={styles.pokemonType}>{pokemon.type}</Text>
                       </View>
                       <Text style={styles.pokemonNumber}>#{pokemon.id.toString().padStart(3, '0')}</Text>
+                      
+                      {/* Debug indicator - shows when item is at center */}
+                      {isSelected && (
+                        <View style={styles.centerIndicator} />
+                      )}
                     </Animated.View>
                   </TouchableOpacity>
                 );
@@ -151,9 +186,11 @@ const PokedexList = () => {
       </View>
       
       {/* Selected Pokemon details */}
-      <View style={styles.detailsContainer}>
+      {/* <View style={styles.detailsContainer}>
         <View style={styles.detailsHeader}>
-          <Text style={styles.selectedText}>SELECTED POKÉMON</Text>
+          <Text style={styles.selectedText}>
+            SELECTED: {POKEMON_DATA.find(p => p.id === selectedId)?.name}
+          </Text>
         </View>
         {POKEMON_DATA.filter(p => p.id === selectedId).map(pokemon => (
           <View key={pokemon.id} style={[styles.detailsCard, { backgroundColor: pokemon.color }]}>
@@ -169,7 +206,7 @@ const PokedexList = () => {
             </View>
           </View>
         ))}
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -178,7 +215,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2c3e50',
-    paddingTop: 40,
   },
   title: {
     fontSize: 32,
@@ -194,69 +230,82 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
+    height: height * 0.5,
   },
   whiteArrowContainer: {
-    width: 30,
+    width: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 5,
+    top: 78.5,
+    height: '100%',
   },
   whiteArrow: {
     width: 0,
     height: 0,
+    top: -10,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: 15,
-    borderRightWidth: 15,
-    borderBottomWidth: 30,
+    borderLeftWidth: 12,
+    borderRightWidth: 12,
+    borderBottomWidth: 24,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: 'white',
+    borderBottomColor: 'maroon',
     transform: [{ rotate: '90deg' }],
   },
   listContainer: {
     flex: 1,
     position: 'relative',
+    height: '100%',
   },
   scrollContainer: {
-    height: height * 0.5,
+    width: '100%',
+    // height: '100%',
+    backgroundColor: 'lavender'
   },
   rulerContainer: {
+    backgroundColor: 'white',
     position: 'absolute',
-    left: -35, // Position to align with the white arrow
+    left: -35,
     right: 0,
-    top: height * 0.25,
+    top: 78.5, // This centers the ruler vertically in the container
     zIndex: 10,
     alignItems: 'flex-start',
     pointerEvents: 'none',
   },
   rulerLine: {
-    width: '105%',
-    height: 2,
+    width: '105%', // Extend slightly beyond the list
+    height: 3,
     backgroundColor: '#FFCC00',
-    marginLeft: 35, // Align with the arrow
+    marginLeft: 35,
+    shadowColor: '#FFCC00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
   rulerCenter: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     backgroundColor: '#FFCC00',
     position: 'absolute',
-    top: -5,
-    left: 35, // Align with the arrow
+    left: 35,
+    shadowColor: '#FFCC00',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
   },
   pokemonItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 80,
+    height: 70,
     marginHorizontal: 20,
     marginVertical: 5,
     borderRadius: 12,
     paddingHorizontal: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
     shadowRadius: 3,
+    elevation: 3,
   },
   pokemonImage: {
     width: 60,
@@ -285,6 +334,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     opacity: 0.8,
+  },
+  centerIndicator: {
+    position: 'absolute',
+    right: 5,
+    top: '50%',
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'red',
+    marginTop: -4,
   },
   detailsContainer: {
     flex: 1,

@@ -112,7 +112,7 @@ const PokedexList = () => {
               onMomentumScrollEnd={handleScrollEnd}
               onScrollEndDrag={handleScrollEnd}
               contentContainerStyle={{
-                top: 78.5 - 40
+                paddingVertical: centerPosition,
               }}
             >
               {POKEMON_DATA.map((pokemon, index) => {
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2c3e50',
+    paddingTop: 40,
   },
   title: {
     fontSize: 32,
@@ -233,15 +234,15 @@ const styles = StyleSheet.create({
     height: height * 0.5,
   },
   whiteArrowContainer: {
-    width: 10,
+    width: 30,
     alignItems: 'center',
-    top: 78.5,
+    justifyContent: 'center',
+    marginRight: 5,
     height: '100%',
   },
   whiteArrow: {
     width: 0,
     height: 0,
-    top: -10,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
     borderLeftWidth: 12,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 24,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: 'maroon',
+    borderBottomColor: 'white',
     transform: [{ rotate: '90deg' }],
   },
   listContainer: {
@@ -258,16 +259,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   scrollContainer: {
-    width: '100%',
-    // height: '100%',
-    backgroundColor: 'purple'
+    height: '100%',
+    backgroundColor: 'yellow'
   },
   rulerContainer: {
-    backgroundColor: 'white',
     position: 'absolute',
     left: -35,
     right: 0,
-    top: 78.5, // This centers the ruler vertically in the container
+    top: '50%', // This centers the ruler vertically in the container
     zIndex: 10,
     alignItems: 'flex-start',
     pointerEvents: 'none',
@@ -288,6 +287,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     backgroundColor: '#FFCC00',
     position: 'absolute',
+    top: -6,
     left: 35,
     shadowColor: '#FFCC00',
     shadowOffset: { width: 0, height: 0 },
